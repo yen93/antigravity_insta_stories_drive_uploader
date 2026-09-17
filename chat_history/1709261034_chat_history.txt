@@ -1,0 +1,34 @@
+================================================================================
+CHAT HISTORY EXPORT — 2026-09-17
+Session: Zero-Cost Supabase Edge Function & 7:00 AM PH Time Daily Schedule Setup
+================================================================================
+
+NOTE ON REDACTION: Redacted Supabase service role key and Google Drive service account private key for security before exporting and committing to git repository.
+
+--------------------------------------------------------------------------------
+USER:
+Asked if the Instagram story Google Drive upload and duplicate deletion routine could be turned into a zero-cost API endpoint that can be called anytime.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Presented 4 zero-cost options:
+1. Supabase Edge Function (Deno/TypeScript) + Supabase pg_cron / pg_net schedule.
+2. GitHub Actions Dispatch API.
+3. Free Serverless API (Vercel / Render / Cloudflare Workers).
+4. Local FastAPI Microservice.
+
+--------------------------------------------------------------------------------
+USER:
+Selected Option 1 (Supabase Edge Function) and requested scheduling it to run daily at 7:00 AM Philippine Time (UTC+8).
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Created implementation plan (`implementation_plan.md`) and built:
+- Supabase Edge Function: `supabase/functions/sync-insta-stories/index.ts` (Deno/TypeScript) to download images, upload to Google Drive, and update database.
+- SQL Migration: `supabase/migrations/20260917_cron_sync_insta_stories.sql` (`pg_cron` + `pg_net` configured for `0 23 * * *` UTC / 7:00 AM PH Time).
+- Updated `as_built.txt` and `CLAUDE.md`.
+- Staged, committed, and pushed changes to GitHub repo `https://github.com/yen93/antigravity_insta_stories_drive_uploader`.
+
+================================================================================
+END OF EXPORT
+================================================================================

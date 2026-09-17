@@ -1,35 +1,35 @@
 # CLAUDE.md — Developer Guidelines & Project Information
 
 ## Overview
-This repository contains automated tooling for querying Instagram story metadata from a Supabase PostgreSQL database, downloading story images, uploading them into a specified Google Drive folder, and updating the database records with the Google Drive web view links.
+This repository contains automated tooling and API endpoints for querying Instagram story metadata from a Supabase PostgreSQL database, downloading story images, uploading them into a specified Google Drive folder, and updating the database records with Google Drive web view links.
 
 ## Project Structure
-- `sync_insta_stories.py`: Main Python batch script.
-- `requirements.txt`: Python package dependencies (`supabase`, `google-api-python-client`, `requests`, `python-dotenv`).
-- `.env.example`: Template for environment variable configuration.
+- `sync_insta_stories.py`: Python CLI batch sync tool.
+- `supabase/functions/sync-insta-stories/index.ts`: Supabase Edge Function API endpoint (Deno / TypeScript).
+- `supabase/migrations/20260917_cron_sync_insta_stories.sql`: SQL script for 7:00 AM PH Time (23:00 UTC) daily cron schedule (`pg_cron` + `pg_net`).
+- `requirements.txt`: Python dependencies (`supabase`, `google-api-python-client`, `requests`, `python-dotenv`).
+- `.env.example`: Environment variable template.
 - `.agents/skills/dcp/SKILL.md`: Workspace `/dcp` documentation skill.
-- `chat_history/`: Historical exported chat sessions.
-- `as_built.txt`: Living factual inventory of project components.
+- `chat_history/`: Exported chat histories.
+- `as_built.txt`: Living project inventory.
 
-## Setup & Running
-1. Install dependencies:
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
-2. Configure `.env` with Supabase and Google Drive details:
-   ```env
-   SUPABASE_URL=https://<your-project>.supabase.co
-   SUPABASE_SERVICE_KEY=<service-role-key>
-   GOOGLE_DRIVE_FOLDER_ID=<folder-id>
-   GOOGLE_SERVICE_ACCOUNT_FILE=service_account.json
-   ```
-3. Ensure the target Google Drive folder is shared with your Google Cloud Service Account client email (giving it **Editor** permissions).
-4. Run the sync script:
-   ```bash
-   python sync_insta_stories.py
-   ```
+## Deploying the Supabase Edge Function & 7 AM Daily Schedule
 
-## Key Gotchas & Best Practices
-- **Instagram CDN User-Agent**: Instagram CDN edge nodes (`*.fbcdn.net`, `*.cdninstagram.com`) block default automated HTTP user agents. Always include standard browser headers (`User-Agent`, `Accept`, `Accept-Language`) when downloading images.
-- **Service Account Permissions**: Google Drive API requires service account access to be granted by sharing the target folder directly with the service account email.
-- **Idempotency**: The script queries `insta_stories` where `saved_img_link IS NULL` and `insta_story_image_url IS NOT NULL`. Successfully synced records are populated with their Google Drive URL to prevent re-uploading on subsequent runs.
+### Step 1: Deploy Edge Function Secrets
+Set your Google Service Account JSON in Supabase Secrets (via CLI or Supabase Dashboard -> Settings -> Secrets):
+```bash
+supabase secrets set GOOGLE_SERVICE_ACCOUNT_JSON='{"type":"service_account",...}'
+```
+
+### Step 2: Deploy Edge Function
+```bash
+supabase functions deploy sync-insta-stories
+```
+*API Endpoint*: `POST https://aivitcomiywiysrfwqxt.supabase.co/functions/v1/sync-insta-stories`
+
+### Step 3: Enable Daily 7:00 AM PH Time Schedule
+Run the contents of `supabase/migrations/20260917_cron_sync_insta_stories.sql` in the **Supabase SQL Editor**. This sets up `pg_cron` to call the endpoint automatically every day at 7:00 AM Philippine Time (23:00 UTC).
+
+## Key Gotchas
+- **Instagram CDN User-Agent**: Instagram CDN edge nodes block automated HTTP clients. Always include standard browser headers (`User-Agent`, `Accept`).
+- **Service Account Permissions**: The Google Drive folder (`1xm9Ghiyj5KdZBU67c5OUn5S_5kR64z4V`) must be shared with `insta-drive-uploader@claudegwscli-502400.iam.gserviceaccount.com` (Editor role).
