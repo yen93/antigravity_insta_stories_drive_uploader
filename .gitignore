@@ -9,6 +9,10 @@ drive_folder_link.txt
 !skills.json
 !plugins.json
 
+# Supabase CLI temp files
+supabase/.temp/
+.temp/
+
 # Python
 __pycache__/
 *.pyc

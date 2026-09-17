@@ -6,14 +6,14 @@ Last updated: 2026-09-17
 SCRIPTS
 - sync_insta_stories.py — Python batch sync tool for local/CLI execution.
   Requires: SUPABASE_URL, SUPABASE_SERVICE_KEY, GOOGLE_DRIVE_FOLDER_ID, GOOGLE_SERVICE_ACCOUNT_FILE in .env (gitignored)
-- supabase/functions/sync-insta-stories/index.ts — Deno / TypeScript Supabase Edge Function API endpoint.
-  Requires: GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_DRIVE_FOLDER_ID in Supabase Secrets.
+- supabase/functions/sync-insta-stories/index.ts — Deployed Deno / TypeScript Supabase Edge Function API endpoint (LIVE at https://aivitcomiywiysrfwqxt.supabase.co/functions/v1/sync-insta-stories).
+  Requires: GDRIVE_SERVICE_ACCOUNT_JSON, GDRIVE_FOLDER_ID in Supabase Secrets.
 
 EXTERNAL INTEGRATIONS
 - Supabase (https://aivitcomiywiysrfwqxt.supabase.co) — REST API & Edge Functions,
-  credential in .env (gitignored)
+  credential in .env (gitignored) and Supabase Secrets
 - Google Drive API (https://www.googleapis.com/auth/drive) — REST API,
-  credential in service_account_json_key_claudegwscli-502400-3a7969b176ed.json (gitignored)
+  credential in service account key file (gitignored) and Supabase Secrets
 
 DATA STORES
 - insta_stories (Supabase PostgreSQL table holding Instagram story image URLs and Google Drive saved_img_link)
