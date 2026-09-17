@@ -1,0 +1,21 @@
+================================================================================
+AS-BUILT — antigravity_insta_stories_drive_uploader
+Last updated: 2026-09-17
+================================================================================
+
+SCRIPTS
+- sync_insta_stories.py — Batch downloads Instagram story images from Supabase, uploads them to Google Drive, and updates saved_img_link column.
+  Requires: SUPABASE_URL, SUPABASE_SERVICE_KEY, GOOGLE_DRIVE_FOLDER_ID, GOOGLE_SERVICE_ACCOUNT_FILE in .env (gitignored)
+
+EXTERNAL INTEGRATIONS
+- Supabase (https://aivitcomiywiysrfwqxt.supabase.co) — REST API / postgrest client,
+  credential in .env (gitignored)
+- Google Drive API (https://www.googleapis.com/auth/drive) — REST API,
+  credential in service_account_json_key_claudegwscli-502400-3a7969b176ed.json (gitignored)
+
+DATA STORES
+- insta_stories (Supabase PostgreSQL table holding Instagram story image URLs and Google Drive saved_img_link)
+
+AUTOMATIONS / ROUTINES
+- sync_insta_stories.py — Python script for syncing stories where saved_img_link IS NULL and insta_story_image_url IS NOT NULL.
+================================================================================

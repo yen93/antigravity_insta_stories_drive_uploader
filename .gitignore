@@ -1,0 +1,25 @@
+# Environment & Credentials
+.env
+*.env
+supabase.txt
+drive_folder_link.txt
+*token*.txt
+*.json
+!package.json
+!skills.json
+!plugins.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+env/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

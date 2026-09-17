@@ -1,0 +1,58 @@
+================================================================================
+CHAT HISTORY EXPORT — 2026-09-17
+Session: Sync Supabase Instagram Story images to Google Drive & update database
+================================================================================
+
+NOTE ON REDACTION: Redacted Supabase service role key and Google Drive service account private key for security before exporting and committing to git repository.
+
+--------------------------------------------------------------------------------
+USER:
+Request to fetch Instagram story images from Supabase table `insta_stories` where `saved_img_link` is NULL and `insta_story_image_url` is NOT NULL (ordered by `created_at DESC`), upload each image into a Google Drive folder, and update `saved_img_link` in Supabase with the uploaded Drive link.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Created implementation plan (`implementation_plan.md`) outlining script structure, requirements, and needed credentials/folder link.
+
+--------------------------------------------------------------------------------
+USER:
+Confirmed preference to update `saved_img_link` with Google Drive web view link and provided credential files (`supabase.txt`, `service_account_json_key_claudegwscli-502400-3a7969b176ed.json`, `drive_folder_link.txt`) in `C:\Users\Cloverly\Antigravity\test`.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Inspected provided credential files:
+- Supabase URL: https://aivitcomiywiysrfwqxt.supabase.co
+- Supabase Service Key: [REDACTED_SUPABASE_SERVICE_KEY]
+- Google Drive Folder ID: 1xm9Ghiyj5KdZBU67c5OUn5S_5kR64z4V
+- Google Service Account Email: insta-drive-uploader@claudegwscli-502400.iam.gserviceaccount.com (Private key: [REDACTED_PRIVATE_KEY])
+
+Installed required Python dependencies (`supabase`, `google-api-python-client`, `google-auth-httplib2`, `google-auth-oauthlib`, `requests`, `python-dotenv`). Created `.env`, `requirements.txt`, and `sync_insta_stories.py`.
+
+Encountered initial connection timeouts on Instagram CDN domains. Updated `sync_insta_stories.py` with standard browser User-Agent headers and retry logic. Executed `sync_insta_stories.py`, successfully downloading 65 Instagram story images, uploading them to Google Drive, and setting `saved_img_link` in Supabase.
+
+--------------------------------------------------------------------------------
+USER:
+Asked why 123 items were in the Google Drive folder when there should only be 65 or less.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Investigated Google Drive folder contents using `check_gdrive_duplicates.py`. Discovered 58 duplicate uploads caused when the script was restarted following CDN header changes. Created and ran `cleanup_duplicates.py` to trash all 58 duplicate files from Google Drive and verified that Supabase `saved_img_link` URLs match the active 65 Google Drive files.
+
+--------------------------------------------------------------------------------
+USER:
+Requested creation of a global `/dcp` skill based on `C:\Users\Cloverly\Antigravity\test\SKILL.md`.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Created global skill `C:\Users\Cloverly\.agents\skills\dcp\SKILL.md` and workspace skill `c:\Users\Cloverly\Antigravity\test\.agents\skills\dcp\SKILL.md`.
+
+--------------------------------------------------------------------------------
+USER:
+Requested running the `/dcp` skill and using GitHub repository `https://github.com/yen93/antigravity_insta_stories_drive_uploader` for git commit and push.
+
+--------------------------------------------------------------------------------
+ASSISTANT:
+Executing `/dcp` skill steps: creating chat history export, creating `as_built.txt`, creating `CLAUDE.md`, setting up `.gitignore`, committing changes, and pushing to remote repo `https://github.com/yen93/antigravity_insta_stories_drive_uploader`.
+
+================================================================================
+END OF EXPORT
+================================================================================
